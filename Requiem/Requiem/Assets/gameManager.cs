@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -8,6 +9,8 @@ public class GameManager : MonoBehaviour
     [Header("Refs")]
     public jugador paddle;
     public GameObject bolaPrefab;
+
+    public BloqueSpawner spawner;
     public Transform contenedorBolas;
 
     [Header("Estado y Marea (M4)")]
@@ -42,23 +45,39 @@ public class GameManager : MonoBehaviour
         else Destroy(gameObject);
     }
 
+    void Start()
+    {
+        // Generar la primera oleada al iniciar
+        if (spawner != null) spawner.GenerarOleada(oleadaActual);
+    }
+
     void Update()
     {
-        if (estado != Estado.Jugando) return;
+        if (estado != Estado.Jugando)
+        {
+            // --- REINICIAR PARTIDA AL GANAR/PERDER (M6) ---
+            if (Input.GetKeyDown(KeyCode.Return)) // Tecla Enter
+            {
+                Time.timeScale = 1;
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            }
+            return;
+        }
 
         // --- LÓGICA DE LA MAREA (M4) ---
-        mareaY -= velocidadMarea * Time.deltaTime; // Baja constantemente
+        mareaY -= velocidadMarea * Time.deltaTime;
         OnMarea?.Invoke(mareaY);
 
-        if (mareaY <= lineaPaddleY) // Condición de derrota
+        if (mareaY <= lineaPaddleY)
         {
             Derrota();
         }
 
-        // Teclas de prueba temporales para validar M1
-        if (Input.GetKeyDown(KeyCode.Alpha1)) RegistrarBloqueRoto();
-        if (Input.GetKeyDown(KeyCode.Alpha2)) RegistrarRescate();
-        if (Input.GetKeyDown(KeyCode.Alpha3)) RegistrarOfrenda();
+        // --- DISPARAR RÉQUIEM (M5) ---
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            DetonarRequiem();
+        }
     }
 
     // ---- API de Réquiem ----
@@ -72,6 +91,12 @@ public class GameManager : MonoBehaviour
 
         OnRacha?.Invoke(racha);
         OnMarea?.Invoke(mareaY);
+
+        if (spawner != null && spawner.BloquesVivos() <= 1)
+        {
+            AvanzarOleada();
+        }
+
     }
 
     public void RegistrarRescate()
@@ -98,12 +123,23 @@ public class GameManager : MonoBehaviour
 
     public void DetonarRequiem()
     {
+        // Solo funciona si la carga está llena (por defecto 3 ofrendas)
         if (cargaRequiem >= requiemNecesario)
         {
-            // TODO en M5: efecto grande de Réquiem
-            Debug.Log("¡RÉQUIEM DETONADO!");
+            Debug.Log("¡RÉQUIEM DETONADO! La Marea retrocede violentamente.");
+
+            // Efecto: Empuja la marea fuertemente hacia arriba (ej. +3 unidades)
+            mareaY += 3f;
+
+            // Vacía el medidor
             cargaRequiem = 0;
+
+            OnMarea?.Invoke(mareaY);
             OnRequiem?.Invoke(cargaRequiem, false);
+        }
+        else
+        {
+            Debug.Log($"Aún no puedes detonar. Carga actual: {cargaRequiem}/{requiemNecesario}");
         }
     }
 
@@ -114,9 +150,14 @@ public class GameManager : MonoBehaviour
         {
             estado = Estado.Victoria;
             OnEstado?.Invoke(estado);
+            Debug.Log("¡VICTORIA! Sobreviviste a las 5 oleadas.");
+            Time.timeScale = 0; // Congela el juego
         }
         else
         {
+            Debug.Log($"Avanzando a la oleada {oleadaActual}");
+            velocidadMarea += 0.05f; // Sube la dificultad de la marea
+            spawner.GenerarOleada(oleadaActual);
             OnOleada?.Invoke(oleadaActual);
         }
     }
