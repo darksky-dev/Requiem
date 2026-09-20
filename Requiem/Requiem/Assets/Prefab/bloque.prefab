@@ -125,3 +125,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fcd2479accdadbe4a81bf28d88689afa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::bloque
+  chispasPrefab: {fileID: 1674348455444562605, guid: a631ecf0638cf514883e9298bb9df183, type: 3}

@@ -2,11 +2,10 @@ using UnityEngine;
 
 public class bloque : MonoBehaviour
 {
+    public GameObject chispasPrefab;
     void Start()
     {
-        Renderer rend = GetComponent<Renderer>();
 
-        rend.material.color = Random.ColorHSV(0f, 1f, 0.6f, 1f, 0.8f, 1f);
     }
 
     // Update is called once per frame
@@ -21,8 +20,15 @@ public class bloque : MonoBehaviour
         {
             int posibility = Random.Range(0, 5);
 
-            // Llamamos a la API del nuevo GameManager de Réquiem (M3)[cite: 3]
             GameManager.I.RegistrarBloqueRoto();
+
+            if (chispasPrefab != null)
+            {
+                // Instancia las chispas
+                GameObject chispas = Instantiate(chispasPrefab, transform.position, Quaternion.identity);
+                // Destruye el objeto de partículas después de 2 segundos para no llenar la memoria
+                Destroy(chispas, 2f);
+            }
 
             Destroy(this.gameObject);
         }
