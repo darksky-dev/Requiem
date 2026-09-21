@@ -69,7 +69,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 682a020f8afddab42aa489e30f47456b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -156,4 +156,5 @@ MonoBehaviour:
   tiempoVida: 3
   velocidadCaida: 1
   fondoLimbo: -8
-  yaResuelto: 0
+  vfxRescate: {fileID: 9041617644690224911, guid: b8bdead000bb10447b4bbfb1e512a577, type: 3}
+  vfxOfrenda: {fileID: 8223614501050993201, guid: 7e1a256c15d90b74d956297effe061ff, type: 3}

@@ -44,11 +44,6 @@ public class pelota : MonoBehaviour
                 ConvertirEnEco();
             }
         }
-
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            ResetBall();
-        }
     }
 
     public void Launch(Vector3? direccion = null)
