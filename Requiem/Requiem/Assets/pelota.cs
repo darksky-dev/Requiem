@@ -46,6 +46,19 @@ public class pelota : MonoBehaviour
         }
     }
 
+    void FixedUpdate()
+    {
+        // Solo forzamos la velocidad si la bola ya fue lanzada
+        if (launched && rb != null)
+        {
+            // 1. Obtenemos la dirección pura hacia donde se mueve (normalized la vuelve de longitud 1)
+            Vector3 direccionActual = rb.linearVelocity.normalized;
+
+            // 2. Multiplicamos esa dirección pura por nuestra velocidad estricta
+            rb.linearVelocity = direccionActual * launchSpeed;
+        }
+    }
+
     public void Launch(Vector3? direccion = null)
     {
         launched = true;

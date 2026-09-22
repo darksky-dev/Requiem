@@ -38,6 +38,10 @@ public class GameManager : MonoBehaviour
     public event Action<int, bool> OnRequiem;
     public event Action<int> OnOleada;
     public event Action<Estado> OnEstado;
+    public GameObject auraRequiem;
+    public UnityEngine.UI.Image destelloPantalla;
+
+    public AlertaMarea alertaMareaUI;
 
     void Awake()
     {
@@ -66,6 +70,10 @@ public class GameManager : MonoBehaviour
 
         // --- LÓGICA DE LA MAREA (M4) ---
         mareaY -= velocidadMarea * Time.deltaTime;
+        if (alertaMareaUI != null)
+        {
+            alertaMareaUI.mareaCritica = (mareaY <= -2f);
+        }
         OnMarea?.Invoke(mareaY);
 
         if (mareaY <= lineaPaddleY)
@@ -119,6 +127,10 @@ public class GameManager : MonoBehaviour
         OnRacha?.Invoke(racha);
         OnRequiem?.Invoke(cargaRequiem, listo);
         Debug.Log($"Eco ofrendado. Carga Réquiem: {cargaRequiem}/{requiemNecesario}");
+        if (listo)
+        {
+            auraRequiem.SetActive(true);
+        }
     }
 
     public void DetonarRequiem()
@@ -126,6 +138,12 @@ public class GameManager : MonoBehaviour
         // Solo funciona si la carga está llena (por defecto 3 ofrendas)
         if (cargaRequiem >= requiemNecesario)
         {
+            auraRequiem.SetActive(false);
+            AlertaMarea alerta = FindObjectOfType<AlertaMarea>();
+            if (alerta != null) alerta.mareaCritica = false;
+
+            // Disparamos una rutina para hacer el "fogonazo" blanco
+            StartCoroutine(FogonazoRequiem());
             Debug.Log("¡RÉQUIEM DETONADO! La Marea retrocede violentamente.");
 
             // Efecto: Empuja la marea fuertemente hacia arriba (ej. +3 unidades)
@@ -191,5 +209,23 @@ public class GameManager : MonoBehaviour
         int pelotas = FindObjectsByType<pelota>(FindObjectsSortMode.None).Length;
         int ecos = FindObjectsByType<Eco>(FindObjectsSortMode.None).Length;
         return pelotas + ecos;
+    }
+
+    private System.Collections.IEnumerator FogonazoRequiem()
+    {
+        // 1. Pantalla blanca al instante
+        Color colorDestello = destelloPantalla.color;
+        colorDestello.a = 1f;
+        destelloPantalla.color = colorDestello;
+
+        // 2. Se desvanece en 0.5 segundos
+        float t = 1f;
+        while (t > 0f)
+        {
+            t -= Time.deltaTime * 2f;
+            colorDestello.a = t;
+            destelloPantalla.color = colorDestello;
+            yield return null;
+        }
     }
 }
