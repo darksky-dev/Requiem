@@ -40,8 +40,9 @@ public class GameManager : MonoBehaviour
     public event Action<Estado> OnEstado;
     public GameObject auraRequiem;
     public UnityEngine.UI.Image destelloPantalla;
-
     public AlertaMarea alertaMareaUI;
+    public GameObject panelVictoria;
+    public GameObject panelDerrota;
 
     void Awake()
     {
@@ -168,8 +169,8 @@ public class GameManager : MonoBehaviour
         {
             estado = Estado.Victoria;
             OnEstado?.Invoke(estado);
-            Debug.Log("¡VICTORIA! Sobreviviste a las 5 oleadas.");
-            Time.timeScale = 0; // Congela el juego
+            panelVictoria.SetActive(true);
+            Time.timeScale = 0;
         }
         else
         {
@@ -185,7 +186,8 @@ public class GameManager : MonoBehaviour
         estado = Estado.Derrota;
         OnEstado?.Invoke(estado);
         Debug.Log("¡LA MAREA TE ALCANZÓ! GAME OVER.");
-        Time.timeScale = 0; // Congela el juego al perder[cite: 3]
+        panelDerrota.SetActive(true);
+        Time.timeScale = 0;
     }
 
     // ---- Fabricación de bolas ----
