@@ -40,6 +40,8 @@ public class GameManager : MonoBehaviour
     public event Action<Estado> OnEstado;
     public GameObject auraRequiem;
     public UnityEngine.UI.Image destelloPantalla;
+
+    public AudioClip sonidoRequiem;
     public AlertaMarea alertaMareaUI;
     public GameObject panelVictoria;
     public GameObject panelDerrota;
@@ -145,6 +147,15 @@ public class GameManager : MonoBehaviour
 
             // Disparamos una rutina para hacer el "fogonazo" blanco
             StartCoroutine(FogonazoRequiem());
+            AudioSource audioObj = GetComponent<AudioSource>();
+            if (audioObj != null && sonidoRequiem != null)
+            {
+                audioObj.PlayOneShot(sonidoRequiem);
+            }
+            else
+            {
+                Debug.LogWarning("⚠️ ERROR DE AUDIO: Te falta agregar el componente AudioSource al GameManager, o no has asignado el clip 'Sonido Requiem'.");
+            }
             Debug.Log("¡RÉQUIEM DETONADO! La Marea retrocede violentamente.");
 
             // Efecto: Empuja la marea fuertemente hacia arriba (ej. +3 unidades)

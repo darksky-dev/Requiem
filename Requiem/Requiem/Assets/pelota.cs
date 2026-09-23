@@ -11,11 +11,16 @@ public class pelota : MonoBehaviour
     public float umbralLimbo = -5f;
     public GameObject ecoPrefab; // Asignaremos el prefab del Eco aquí
 
+    [Header("Sonido")]
+    public AudioClip clipRebote;
+    private AudioSource audioSource;
+
     private Rigidbody rb;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        audioSource = GetComponent<AudioSource>(); // Añade esta línea
     }
 
     void Start()
@@ -103,4 +108,18 @@ public class pelota : MonoBehaviour
 
         Destroy(gameObject); // La bola original muere
     }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        // Evitamos que suene si choca contra la zona de muerte (el Limbo)
+        if (!collision.gameObject.CompareTag("Limbo") && audioSource != null && clipRebote != null)
+        {
+            // Pequeño truco musical: variar el pitch (tono) muy sutilmente en cada golpe 
+            // para que no suene como un robot, dando una sensación más orgánica.
+            audioSource.pitch = Random.Range(0.9f, 1.1f);
+
+            audioSource.PlayOneShot(clipRebote);
+        }
+    }
+
 }

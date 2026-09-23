@@ -160,6 +160,7 @@ MonoBehaviour:
   offset: {x: 0, y: 0.8, z: 0}
   umbralLimbo: -5
   ecoPrefab: {fileID: 4654866783549843789, guid: c26b8b461bfde064c96fae173c4fed69, type: 3}
+  clipRebote: {fileID: 8300000, guid: e508d56c0305aba4c8ffbb546b32ac93, type: 3}
 --- !u!96 &5027134679603553119
 TrailRenderer:
   serializedVersion: 4
@@ -209,8 +210,8 @@ TrailRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Time: 0.05
-  m_PreviewTimeScale: 1
+  m_Time: 0.08
+  m_PreviewTimeScale: 0.5
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -226,6 +227,15 @@ TrailRenderer:
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
