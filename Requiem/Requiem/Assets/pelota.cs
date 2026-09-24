@@ -111,11 +111,8 @@ public class pelota : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        // Evitamos que suene si choca contra la zona de muerte (el Limbo)
-        if (!collision.gameObject.CompareTag("Limbo") && audioSource != null && clipRebote != null)
+        if (audioSource != null && clipRebote != null)
         {
-            // Pequeño truco musical: variar el pitch (tono) muy sutilmente en cada golpe 
-            // para que no suene como un robot, dando una sensación más orgánica.
             audioSource.pitch = Random.Range(0.9f, 1.1f);
 
             audioSource.PlayOneShot(clipRebote);

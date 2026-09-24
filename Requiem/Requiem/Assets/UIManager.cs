@@ -5,11 +5,11 @@ using TMPro;
 public class UIManager : MonoBehaviour
 {
     public Image llenadoRequiem;
-    public TextMeshProUGUI textoOleada;
-
     public Transform contenedorRacha;
     public GameObject llamaPrefab;
     private int rachaVisualActual = 0;
+    public TextMeshProUGUI textoOleada;
+    public TextMeshProUGUI textoPuntaje; 
 
     void Update()
     {
@@ -22,7 +22,13 @@ public class UIManager : MonoBehaviour
         // 2. Actualizar la Oleada
         textoOleada.text = $"OLEADA {GameManager.I.oleadaActual} / {GameManager.I.oleadasTotales}";
 
-        // 3. Actualizar la Racha
+        textoOleada.text = $"OLEADA {GameManager.I.oleadaActual} / {GameManager.I.oleadasTotales}";
+
+        if (textoPuntaje != null)
+        {
+            textoPuntaje.text = $"PUNTOS: {GameManager.I.puntos.ToString("D4")}";
+        }
+
         if (GameManager.I.racha != rachaVisualActual)
         {
             ActualizarLlamas(GameManager.I.racha);
