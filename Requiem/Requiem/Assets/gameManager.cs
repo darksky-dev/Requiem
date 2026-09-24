@@ -189,6 +189,12 @@ public class GameManager : MonoBehaviour
             velocidadMarea += 0.05f; // Sube la dificultad de la marea
             spawner.GenerarOleada(oleadaActual);
             OnOleada?.Invoke(oleadaActual);
+            pelota scriptPelota = FindObjectOfType<pelota>();
+            if (scriptPelota != null)
+            {
+                // Ajusta el nombre si en tu script original dice "RestBall" o "ResetBall"
+                scriptPelota.ResetBall();
+            }
         }
     }
 

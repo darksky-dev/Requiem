@@ -77,7 +77,7 @@ public class pelota : MonoBehaviour
         rb.linearVelocity = dirFinal * launchSpeed;
     }
 
-    void ResetBall()
+    public void ResetBall()
     {
         launched = false;
         rb.linearVelocity = Vector3.zero;
